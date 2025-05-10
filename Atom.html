@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atom - Powering your digital world</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for the editable paragraph */
+        #editable-text:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.4); /* Tailwind's focus-visible ring color */
+            border-radius: 0.375rem; /* Tailwind's rounded-md */
+        }
+        .container {
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 1rem;
+            padding-right: 1rem;
+            max-width: 1400px; /* Increased max-width for larger screens */
+        }
+
+        /* Increased font size and line height for better readability */
+        p {
+            font-size: 1.1rem; /* Increased from 1rem to 1.1rem (16px to 17.6px) */
+            line-height: 1.7; /* Increased from 1.5 to 1.7 for more vertical space */
+            color: #e5e7eb; /* Slightly lighter text for better contrast on dark background */
+        }
+
+        ol {
+            list-style-position: inside;
+            padding-left: 0; /* Removed default padding, using inside positioning */
+        }
+
+        ol li {
+            margin-bottom: 0.75rem; /* Increased from 0.5rem to 0.75rem */
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: #e5e7eb;
+        }
+
+        ol li strong {
+            color: #f9fafb; /* Strong font color */
+        }
+
+        h2 {
+            font-size: 2rem; /* Increased heading size */
+            margin-bottom: 1.5rem; /* Increased heading margin */
+            color: #d8b4fe;
+        }
+
+        .bg-gray-800 {
+            background-color: #4a5568; /* Slightly lighter background for better contrast */
+            padding: 2rem; /* Increased padding */
+            border-radius: 0.75rem; /* More rounded corners */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Slightly stronger shadow */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; /* Added transition */
+        }
+
+        .bg-gray-800:hover {
+            transform: translateY(-4px); /* Slight lift on hover */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6); /* Increased shadow on hover */
+        }
+
+        .text-purple-500 {
+            color: #ab70f5; /* A slightly lighter shade of purple */
+            transition: color 0.3s ease;
+        }
+
+        .text-purple-500:hover{
+             color: #d084ff;
+        }
+
+        .hover\:text-purple-300:hover {
+            color: #d084ff; /* A lighter hover color */
+        }
+
+        header {
+            background-color: rgba(26, 32, 44, 0.9); /* Slightly more transparent header */
+            transition: background-color 0.3s ease;
+        }
+
+        header:hover {
+            background-color: rgba(26, 32, 44, 0.95); /* Slightly darker on hover */
+        }
+
+        footer {
+             background-color: rgba(26, 32, 44, 0.9);
+             transition: background-color 0.3s ease;
+        }
+
+        footer:hover {
+            background-color: rgba(26, 32, 44, 0.95);
+        }
+
+        .shadow-md {
+             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+        }
+
+        .rounded-b-lg{
+            border-bottom-left-radius: 0.75rem;
+            border-bottom-right-radius: 0.75rem;
+        }
+         .rounded-t-lg{
+             border-top-left-radius: 0.75rem;
+            border-top-right-radius: 0.75rem;
+        }
+
+        #hamburger-btn svg {
+            width: 1.75rem; /* Increased hamburger icon size */
+            height: 1.75rem;
+            transition: transform 0.3s ease; /* Added rotation transition */
+        }
+
+        #hamburger-btn:hover svg {
+            transform: rotate(90deg); /* Rotate on hover */
+        }
+
+        #close-menu-btn svg{
+            width: 1.75rem;
+            height: 1.75rem;
+            transition: transform 0.3s ease;
+        }
+        #close-menu-btn:hover svg {
+            transform: rotate(180deg);
+        }
+
+        .mobile-menu-open {
+            animation: slideIn 0.3s ease-in-out;
+        }
+
+        .mobile-menu-close {
+            animation: slideOut 0.3s ease-in-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+            }
+            to {
+                transform: translateX(100%);
+            }
+        }
+        /* Keyframes for the Atom text animation */
+        @keyframes atom-animation {
+            0% { transform: scale(1); color: #ab70f5; }
+            25% { transform: scale(1.2); color: #d084ff; }
+            50% { transform: scale(1); color: #f9a8d4; }
+            75% { transform: scale(1.2); color: #d084ff; }
+            100% { transform: scale(1); color: #ab70f5; }
+        }
+
+        /* Keyframes for the background gradient animation */
+        @keyframes wave-gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        body {
+            background-size: 200% 200%;
+            animation: wave-gradient 12s ease infinite; /* Increased duration to 12s for slower animation */
+            scroll-behavior: smooth; /* Add smooth scrolling */
+        }
+
+        #atom-easter-egg {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 10rem;
+            color: rgba(255, 255, 255, 0.8);
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            pointer-events: none; /* Allows clicks to pass through */
+        }
+
+        .atom-visible {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1.2);
+        }
+
+    </style>
+</head>
+<body class="bg-gradient-to-br from-gray-900 to-gray-800 text-white font-sans antialiased">
+    <header class="bg-gray-900 bg-opacity-90 backdrop-blur-md py-6 px-8 rounded-b-lg shadow-md sticky top-0 z-10 transition-all duration-300 ease-in-out">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="#" class="text-3xl font-bold text-purple-500 hover:text-purple-400 transition-colors duration-300 atom-text-animation" id="atom-text">Atom</a>
+            <nav class="hidden md:block">
+                <ul class="flex space-x-6">
+                    <li><a href="#how-to-make-pc" class="hover:text-purple-300 transition duration-300 text-lg font-semibold">How to Make a PC</a></li>
+                </ul>
+            </nav>
+            <button id="hamburger-btn" class="md:hidden text-white focus:outline-none" aria-label="Toggle Navigation">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <div id="mobile-menu" class="hidden fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-95 z-20">
+        <div class="bg-gray-800 w-80 h-full absolute right-0 p-6 rounded-lg shadow-xl">
+            <div class="flex justify-end mb-4">
+                <button id="close-menu-btn" class="text-white focus:outline-none" aria-label="Close Menu">
+                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <nav class="block">
+                <ul class="space-y-4">
+                    <li><a href="#how-to-make-pc" class="block text-lg text-white hover:text-purple-300 transition duration-300">How to Make a PC</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <main class="container mx-auto px-8 py-10">
+        <section class="text-center mb-16">
+            <h1 class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 mb-4">
+                Welcome to Atom
+            </h1>
+            <p id="editable-text" contenteditable="true" class="text-lg text-gray-300 leading-relaxed">
+                Hello, welcome to Atom, an upcoming PC business. We haven't started making PC's just yet, which is why we want to share how you can make your own.
+            </p>
+        </section>
+
+        <section id="how-to-make-pc" class="mb-16">
+            <h2 class="text-3xl font-semibold text-purple-400 text-center mb-8">How to Make a PC</h2>
+            <div class="bg-gray-800 rounded-lg shadow-md p-6 transition-all duration-300 ease-in-out hover:shadow-lg hover:scale-[1.02]">
+                <p class="text-gray-300 leading-relaxed mb-6">
+                    Embarking on the journey of building your own PC grants you unparalleled control over its performance and aesthetic appeal.  To guide you through this process, we've assembled a comprehensive, step-by-step walkthrough:
+                </p>
+                <ol class="list-decimal list-inside space-y-4 text-gray-300">
+                    <li>
+                        <strong class="text-white">Ensuring Component Compatibility:</strong>  The linchpin of a successful build is verifying that all your chosen parts will function harmoniously.  For this, we enthusiastically recommend utilizing <a href="https://pcpartpicker.com" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:underline">PC Part Picker</a>.  This exceptional tool not only guarantees compatibility but also aids in discovering the most advantageous deals.
+                    </li>
+                    <li>
+                        <strong class="text-white">CPU Installation:</strong>  Exercise utmost care when handling this critical component.  Begin by gently lifting the lever on the CPU socket to a 90° angle.  Precisely align the triangle marking on the CPU with its counterpart on the socket.  Carefully seat the CPU straight down into the socket; it should fit without any applied pressure.  Finally, secure the CPU by pressing down the lever, ensuring it rests perfectly flush.
+                    </li>
+                    <li>
+                        <strong class="text-white">CPU Cooler Application:</strong>  A pivotal step in maintaining optimal thermal performance.  Apply a minuscule, pea-sized drop of thermal paste to the center of the CPU's surface.  During cooler selection, meticulously verify its size and weight constraints relative to your case and motherboard.  An excessively large or heavy cooler harbors the potential to inflict damage upon the motherboard.
+                    </li>
+                    <li>
+                        <strong class="text-white">RAM Installation:</strong>  A relatively straightforward procedure.  Align the notch on the RAM module with the corresponding slot on the motherboard.  Prior to inserting the module, unlock the latches on the RAM slot.  Exert even pressure on both ends of the RAM stick until an audible click confirms its secure placement.  Subsequently, lock the latches.
+                    </li>
+                    <li>
+                        <strong class="text-white">Motherboard Mounting:</strong>  The time has come to secure the motherboard within the confines of your case.  Affix it to the standoffs provided with your case.  Given that this stage involves connecting various cables, we advise consulting online tutorials if you require guidance.
+                    </li>
+                    <li>
+                        <strong class="text-white">Storage Drive Installation:</strong>  Your case and/or motherboard will feature dedicated bays or mounts for accommodating your storage devices (SSDs and HDDs).  Securely fasten your drives within these designated locations.
+                    </li>
+                    <li>
+                        <strong class="text-white">Graphics Card Installation:</strong>  The graphics card (GPU) is installed into the primary PCIe slot on your motherboard.  Should you encounter difficulty in locating this slot, please refer to your motherboard's manual for assistance.
+                    </li>
+                    <li>
+                        <strong class="text-white">Cable Management:</strong>  Employing effective cable management techniques not only enhances the visual appeal of your PC but also promotes optimal airflow.  Most cases incorporate routing channels and tie-down points to facilitate this.  We recommend exploring online cable management guides tailored to your specific case model or comparable designs for inspiration.
+                    </li>
+                    <li>
+                        <strong class="text-white">Initial Power-On:</strong>  The moment of truth approaches!  Power on your PC to ascertain whether all components are functioning as expected.  For this preliminary testing phase, it is prudent to keep the side panels detached to facilitate easier troubleshooting.  Exercise caution to ensure that no foreign objects come into contact with the PC's internal components, as this could pose an electrical hazard.
+                    </li>
+                    <li>
+                        <strong class="text-white">Operating System Installation:</strong>  This process necessitates the use of either a USB drive or installation media.  Given that the installation procedure varies depending on the chosen operating system (e.g., Windows, Linux), we recommend consulting online resources for detailed, OS-specific instructions.
+                    </li>
+                    <li>
+                       <strong class="text-white">Discover More at Atom:</strong> We are dedicated to providing you with the resources necessary to embark on your PC building journey.  Keep an eye out for more in-depth tips and guides on our website!
+                    </li>
+                </ol>
+                <p class="text-gray-300 leading-relaxed mt-6">
+                    For comprehensive instructions and troubleshooting assistance, we strongly encourage you to consult your component manuals and reputable online resources.  Remember, PC building is a dynamic learning experience, so embrace the process, exercise patience, and savor the satisfaction of creating your own custom-built machine!
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-900 bg-opacity-90 backdrop-blur-md py-4 text-center text-gray-400 rounded-t-lg shadow-md transition-all duration-300 ease-in-out hover:scale-[1.01]">
+        <p>&copy; 2025 Atom. All rights reserved.</p>
+    </footer>
+
+    <div id="atom-easter-egg">&#9774;</div>
+
+    <script>
+        const hamburgerBtn = document.getElementById("hamburger-btn");
+        const mobileMenu = document.getElementById("mobile-menu");
+        const closeMenuBtn = document.getElementById("close-menu-btn");
+        const mobileMenuLinks = mobileMenu.querySelectorAll("a");
+        const navLinks = document.querySelectorAll('header nav a');
+        const sections = document.querySelectorAll('section');
+        const atomText = document.getElementById('atom-text');
+        const atomEasterEgg = document.getElementById('atom-easter-egg');
+
+        let keysPressed = '';
+
+        function toggleMobileMenu() {
+            mobileMenu.classList.toggle("hidden");
+            mobileMenu.classList.toggle("mobile-menu-open");
+        }
+
+        hamburgerBtn.addEventListener("click", toggleMobileMenu);
+        closeMenuBtn.addEventListener("click", toggleMobileMenu);
+        mobileMenuLinks.forEach(link => {
+            link.addEventListener("click", toggleMobileMenu);
+        });
+
+        document.addEventListener('click', (event) => {
+            if (!mobileMenu.classList.contains('hidden') && !mobileMenu.contains(event.target) && event.target !== hamburgerBtn) {
+                toggleMobileMenu();
+                mobileMenu.classList.remove("mobile-menu-open");
+                mobileMenu.classList.add("mobile-menu-close");
+                setTimeout(() => {
+                    mobileMenu.classList.remove("mobile-menu-close");
+                }, 300);
+            }
+        });
+
+        function updateActiveNavLink() {
+            let currentSectionId = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (window.scrollY >= sectionTop - 100 && window.scrollY < sectionTop + sectionHeight - 100) {
+                    currentSectionId = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').slice(1) === currentSectionId) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', updateActiveNavLink);
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Apply the animation on click
+        atomText.addEventListener('click', () => {
+            atomText.style.animation = 'atom-animation 2s infinite';
+            // Remove the animation after it completes
+            setTimeout(() => {
+                atomText.style.animation = '';
+            }, 2000);
+        });
+
+        document.addEventListener('keydown', (event) => {
+            keysPressed += event.key.toLowerCase();
+            if (keysPressed.includes('atom')) {
+                atomEasterEgg.classList.add('atom-visible');
+                setTimeout(() => {
+                    atomEasterEgg.classList.remove('atom-visible');
+                }, 3000); // Remove after 3 seconds
+                keysPressed = ''; // Reset the keysPressed string
+            }
+            // Keep the keysPressed string to a maximum length to avoid memory issues
+            if (keysPressed.length > 20) {
+                keysPressed = keysPressed.substring(keysPressed.length - 20);
+            }
+        });
+    </script>
+</body>
+</html>
